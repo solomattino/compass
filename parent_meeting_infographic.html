@@ -99,7 +99,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // Placeholder icons (removed Lucide React components)
+        // Placeholder icons (emojis)
         const CheckIcon = () => <span className="icon-placeholder">✅</span>;
         const MinusIcon = () => <span className="icon-placeholder">➖</span>;
         const StarIcon = () => <span className="icon-placeholder">⭐</span>;
@@ -128,9 +128,12 @@
                 { name: '2024-2025', value: 4.06 },
             ];
 
-            // Conditionally render Recharts components using direct access
-            // This will only render if window.Recharts and its components are available
-            const RechartsCharts = window.Recharts && window.Recharts.LineChart && window.Recharts.ResponsiveContainer ? (
+            // Direct access to Recharts components.
+            // This relies on Recharts.min.js being loaded BEFORE this script block is executed by Babel.
+            // If window.Recharts is not fully populated, these will be undefined.
+            const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts || {};
+
+            const ChartsContent = (LineChart && ResponsiveContainer) ? (
                 <>
                     {/* Безопасность и поддерживающая среда */}
                     <div className="metric-card">
@@ -143,15 +146,15 @@
                             <p>2024-2025: 4.19</p>
                         </div>
                         <div className="chart-container">
-                            <window.Recharts.ResponsiveContainer width="100%" height="100%">
-                                <window.Recharts.LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                                    <window.Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
-                                    <window.Recharts.XAxis dataKey="name" stroke="#9CA3AF" />
-                                    <window.Recharts.YAxis domain={[3, 5]} stroke="#9CA3AF" />
-                                    <window.Recharts.Tooltip />
-                                    <window.Recharts.Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
-                                </window.Recharts.LineChart>
-                            </window.Recharts.ResponsiveContainer>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
+                                    <XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <Tooltip />
+                                    <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </LineChart>
+                            </ResponsiveContainer>
                         </div>
                         <p className="text-xs text-gray-500 mt-2">Небольшая корректировка, над которой мы работаем</p>
                     </div>
@@ -167,15 +170,15 @@
                             <p>2024-2025: 4.06</p>
                         </div>
                         <div className="chart-container">
-                            <window.Recharts.ResponsiveContainer width="100%" height="100%">
-                                <window.Recharts.LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                                    <window.Recharts.CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
-                                    <window.Recharts.XAxis dataKey="name" stroke="#9CA3AF" />
-                                    <window.Recharts.YAxis domain={[3, 5]} stroke="#9CA3AF" />
-                                    <window.Recharts.Tooltip />
-                                    <window.Recharts.Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
-                                </window.Recharts.LineChart>
-                            </window.Recharts.ResponsiveContainer>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
+                                    <XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <Tooltip />
+                                    <Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </LineChart>
+                            </ResponsiveContainer>
                         </div>
                         <p className="text-xs text-gray-500 mt-2">Стабильный рост и укрепление доверия</p>
                     </div>
@@ -234,7 +237,7 @@
                             Ключевые Показатели Удовлетворенности (средний балл 1-5)
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {RechartsCharts}
+                            {ChartsContent}
                         </div>
                     </section>
 
@@ -335,11 +338,42 @@
         }
 
         // Mount the React component to the root div
-        // Ensure this runs after all scripts are loaded and a small delay
         window.onload = () => {
-            setTimeout(() => {
-                ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-            }, 500); // Add a 500ms delay
+            console.log("Window loaded. Starting Recharts availability check loop...");
+            const rootElement = document.getElementById('root');
+
+            let checkCount = 0;
+            const maxChecks = 50; // Check for up to 5 seconds (50 * 100ms)
+
+            const checkAndRender = () => {
+                // Check if Recharts global object and its key components are available
+                if (window.Recharts && window.Recharts.LineChart && window.Recharts.ResponsiveContainer) {
+                    console.log("Recharts is ready. Rendering App.");
+                    ReactDOM.createRoot(rootElement).render(<App />);
+                    clearInterval(intervalId); // Stop checking
+                } else if (checkCount < maxChecks) {
+                    checkCount++;
+                    console.log(`Recharts not ready yet. Attempt ${checkCount}/${maxChecks}.`);
+                } else {
+                    console.error("Failed to load Recharts after multiple attempts. Displaying error message.");
+                    if (rootElement) {
+                        rootElement.innerHTML = `
+                            <div style="text-align: center; padding: 50px; color: #ef4444; font-size: 1.5rem;">
+                                Ошибка: Графики не могут быть загружены. Пожалуйста, попробуйте обновить страницу.
+                                <br/> (Проверьте консоль браузера на вкладках "Консоль" и "Сеть" для получения дополнительной информации о загрузке Recharts).
+                            </div>
+                        `;
+                    }
+                    clearInterval(intervalId); // Stop checking
+                }
+            };
+
+            if (rootElement) {
+                // Start checking immediately and then repeatedly
+                const intervalId = setInterval(checkAndRender, 100);
+            } else {
+                console.error("Root element #root not found in the document!");
+            }
         };
     </script>
 </body>
