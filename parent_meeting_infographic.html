@@ -99,8 +99,6 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
-
         // Placeholder icons (removed Lucide React components)
         const CheckIcon = () => <span className="icon-placeholder">✅</span>;
         const MinusIcon = () => <span className="icon-placeholder">➖</span>;
@@ -337,9 +335,11 @@
         }
 
         // Mount the React component to the root div
-        // Ensure this runs after all scripts are loaded
+        // Ensure this runs after all scripts are loaded and a small delay
         window.onload = () => {
-            ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+            setTimeout(() => {
+                ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+            }, 500); // Add a 500ms delay
         };
     </script>
 </body>
