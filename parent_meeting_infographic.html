@@ -9,10 +9,6 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="module">
-      import { createIcons, icons } from 'https://unpkg.com/lucide-react@latest/dist/lucide-react.js';
-      window.lucide = { createIcons, icons };
-    </script>
     <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
     <style>
         body {
@@ -90,10 +86,12 @@
             font-size: 0.95rem;
             color: #4B5563;
         }
-        .action-card li svg {
+        .action-card li .icon-placeholder { /* Styling for the new icon placeholders */
             margin-right: 0.5rem;
             margin-top: 0.2rem;
             color: #3b82f6; /* Stronger blue for action items */
+            font-size: 1.2em; /* Make them a bit larger */
+            line-height: 1; /* Align text better */
         }
     </style>
 </head>
@@ -101,9 +99,25 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // Recharts components are directly available on window.Recharts after the CDN script loads
-        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts;
-        const { CheckCircle, MinusCircle, XCircle, AlertCircle, TrendingUp, TrendingDown, RefreshCw, BookOpen, Home, Zap, Users, MessageSquare, Target, Folder, Lightbulb, GraduationCap, Handshake, ChevronRight, Star, Heart, Smile } = window.lucide.icons;
+        // Destructure Recharts components at the top of the Babel script block
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+
+        // Placeholder icons (removed Lucide React components)
+        const CheckIcon = () => <span className="icon-placeholder">✅</span>;
+        const MinusIcon = () => <span className="icon-placeholder">➖</span>;
+        const StarIcon = () => <span className="icon-placeholder">⭐</span>;
+        const HeartIcon = () => <span className="icon-placeholder">❤️</span>;
+        const SmileIcon = () => <span className="icon-placeholder">😊</span>;
+        const TrendingUpIcon = () => <span className="icon-placeholder">📈</span>;
+        const RefreshCwIcon = () => <span className="icon-placeholder">🔄</span>;
+        const FolderIcon = () => <span className="icon-placeholder">📁</span>;
+        const GraduationCapIcon = () => <span className="icon-placeholder">🎓</span>;
+        const HomeIcon = () => <span className="icon-placeholder">🏠</span>;
+        const MessageSquareIcon = () => <span className="icon-placeholder">💬</span>;
+        const AlertCircleIcon = () => <span className="icon-placeholder">⚠️</span>;
+        const LightbulbIcon = () => <span className="icon-placeholder">💡</span>;
+        const ChevronRightIcon = () => <span className="icon-placeholder">▶️</span>;
+
 
         function App() {
             // Data for the charts
@@ -116,6 +130,7 @@
                 { name: '2023-2024', value: 4.04 },
                 { name: '2024-2025', value: 4.06 },
             ];
+
 
             return (
                 <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 font-sans text-gray-800 p-6 sm:p-8 md:p-12 rounded-xl shadow-lg">
@@ -155,7 +170,7 @@
                             {/* Безопасность и поддерживающая среда */}
                             <div className="metric-card">
                                 <div className="icon-bg">
-                                    <AlertCircle size={36} className="text-blue-600" />
+                                    <AlertCircleIcon />
                                 </div>
                                 <h4 className="text-xl font-semibold text-blue-800 mb-2">Безопасность и Поддержка</h4>
                                 <div className="w-full text-sm text-gray-600 mb-2">
@@ -179,7 +194,7 @@
                             {/* Комфорт обсуждения вопросов (Коммуникация) */}
                             <div className="metric-card">
                                 <div className="icon-bg">
-                                    <MessageSquare size={36} className="text-green-600" />
+                                    <MessageSquareIcon />
                                 </div>
                                 <h4 className="text-xl font-semibold text-green-800 mb-2">Открытое Общение</h4>
                                 <div className="w-full text-sm text-gray-600 mb-2">
@@ -203,7 +218,7 @@
                             {/* Понятность структуры школы и процессов */}
                             <div className="metric-card">
                                 <div className="icon-bg">
-                                    <Lightbulb size={36} className="text-purple-600" />
+                                    <LightbulbIcon />
                                 </div>
                                 <h4 className="text-xl font-semibold text-purple-800 mb-2">Ясность Структуры</h4>
                                 <div className="w-full text-sm text-gray-600 mb-2">
@@ -224,36 +239,36 @@
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {/* Улучшили */}
                             <div className="p-5 positive-bg rounded-xl shadow-md flex flex-col items-center">
-                                <TrendingUp size={48} className="text-green-600 mb-3" />
+                                <TrendingUpIcon />
                                 <h3 className="text-xl font-bold text-green-700 mb-4">Наш Прогресс: Что Мы Улучшили</h3>
                                 <ul className="space-y-2 text-left w-full">
-                                    <li className="flex items-center"><CheckCircle size={18} className="text-green-600 mr-2" /> Понимание структуры и процессов</li>
-                                    <li className="flex items-center"><CheckCircle size={18} className="text-green-600 mr-2" /> Комфорт в обсуждении вопросов</li>
-                                    <li className="flex items-center"><CheckCircle size={18} className="text-green-600 mr-2" /> Психологическая поддержка и тьюторство</li>
+                                    <li className="flex items-center"><CheckIcon /> Понимание структуры и процессов</li>
+                                    <li className="flex items-center"><CheckIcon /> Комфорт в обсуждении вопросов</li>
+                                    <li className="flex items-center"><CheckIcon /> Психологическая поддержка и тьюторство</li>
                                 </ul>
                             </div>
 
                             {/* Сохранили */}
                             <div className="p-5 stable-bg rounded-xl shadow-md flex flex-col items-center">
-                                <RefreshCw size={48} className="text-blue-600 mb-3" />
+                                <RefreshCwIcon />
                                 <h3 className="text-xl font-bold text-blue-700 mb-4">Наши Сильные Стороны: Что Мы Сохранили</h3>
                                 <ul className="space-y-2 text-left w-full">
-                                    <li className="flex items-center"><Star size={18} className="text-blue-600 mr-2" /> Качество работы классных руководителей</li>
-                                    <li className="flex items-center"><Heart size={18} className="text-blue-600 mr-2" /> Поддерживающая и дружелюбная атмосфера</li>
-                                    <li className="flex items-center"><Smile size={18} className="text-blue-600 mr-2" /> Индивидуальный подход к детям</li>
+                                    <li className="flex items-center"><StarIcon /> Качество работы классных руководителей</li>
+                                    <li className="flex items-center"><HeartIcon /> Поддерживающая и дружелюбная атмосфера</li>
+                                    <li className="flex items-center"><SmileIcon /> Индивидуальный подход к детям</li>
                                 </ul>
                             </div>
 
                             {/* Области для Роста */}
                             <div className="p-5 growth-bg rounded-xl shadow-md flex flex-col items-center">
-                                <Folder size={48} className="text-yellow-600 mb-3" />
+                                <FolderIcon />
                                 <h3 className="text-xl font-bold text-yellow-700 mb-4">Наши Точки Роста: Направления для Развития</h3>
                                 <ul className="space-y-2 text-left w-full">
-                                    <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Дисциплина и поведение</li>
-                                    <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Иностранные языки</li>
-                                    <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Академическая строгость и оценивание</li>
-                                    <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Доступность информации</li>
-                                    <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Условия и чистота помещений</li>
+                                    <li className="flex items-center"><MinusIcon /> Дисциплина и поведение</li>
+                                    <li className="flex items-center"><MinusIcon /> Иностранные языки</li>
+                                    <li className="flex items-center"><MinusIcon /> Академическая строгость и оценивание</li>
+                                    <li className="flex items-center"><MinusIcon /> Доступность информации</li>
+                                    <li className="flex items-center"><MinusIcon /> Условия и чистота помещений</li>
                                 </ul>
                             </div>
                         </div>
@@ -266,31 +281,31 @@
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="action-card">
-                                <GraduationCap size={48} className="text-indigo-600 mb-3" />
+                                <GraduationCapIcon />
                                 <h3 className="text-xl font-semibold text-indigo-800 mb-2">Академический Прогресс</h3>
                                 <ul className="w-full">
-                                    <li><ChevronRight size={18} /> Пересмотр программы по английскому языку.</li>
-                                    <li><ChevronRight size={18} /> Внедрение четкой системы формирующего оценивания.</li>
-                                    <li><ChevronRight size={18} /> Усиление методической поддержки.</li>
+                                    <li><ChevronRightIcon /> Пересмотр программы по английскому языку.</li>
+                                    <li><ChevronRightIcon /> Внедрение четкой системы формирующего оценивания.</li>
+                                    <li><ChevronRightIcon /> Усиление методической поддержки.</li>
                                 </ul>
                             </div>
 
                             <div className="action-card">
-                                <Home size={48} className="text-indigo-600 mb-3" />
+                                <HomeIcon />
                                 <h3 className="text-xl font-semibold text-indigo-800 mb-2">Комфортная Среда Обучения</h3>
                                 <ul className="w-full">
-                                    <li><ChevronRight size={18} /> Улучшение чистоты и эстетики помещений.</li>
-                                    <li><ChevronRight size={18} /> Разработка единых правил дисциплины.</li>
+                                    <li><ChevronRightIcon /> Улучшение чистоты и эстетики помещений.</li>
+                                    <li><ChevronRightIcon /> Разработка единых правил дисциплины.</li>
                                 </ul>
                             </div>
 
                             <div className="action-card">
-                                <MessageSquare size={48} className="text-indigo-600 mb-3" />
+                                <MessageSquareIcon />
                                 <h3 className="text-xl font-semibold text-indigo-800 mb-2">Открытая и Эффективная Коммуникация</h3>
                                 <ul className="w-full">
-                                    <li><ChevronRight size={18} /> Улучшение информирования.</li>
-                                    <li><ChevronRight size={18} /> Запуск Методического круга.</li>
-                                    <li><ChevronRight size={18} /> Новая система обратной связи для родителей.</li>
+                                    <li><ChevronRightIcon /> Улучшение информирования.</li>
+                                    <li><ChevronRightIcon /> Запуск Методического круга.</li>
+                                    <li><ChevronRightIcon /> Новая система обратной связи для родителей.</li>
                                 </ul>
                             </div>
                         </div>
@@ -305,7 +320,7 @@
                             Ваше активное участие в жизни Школы-Сада "Компас" – это наш общий ресурс для роста и процветания. Давайте строить будущее вместе!
                         </p>
                         <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center mx-auto">
-                            Присоединяйтесь к Родительскому кругу <ChevronRight size={20} className="ml-2" />
+                            Присоединяйтесь к Родительскому кругу <ChevronRightIcon />
                         </button>
                     </section>
                 </div>
@@ -313,7 +328,10 @@
         }
 
         // Mount the React component to the root div
-        ReactDOM.render(<App />, document.getElementById('root'));
+        // Ensure this runs after all scripts are loaded
+        window.onload = () => {
+            ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+        };
     </script>
 </body>
 </html>
