@@ -1,311 +1,375 @@
-и </html>)">
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Инфографика для родителей: Наш Год Вместе и Академические Планы</title>
+    <title>Инфографика: Наш Общий Путь к Развитию Школы</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F8F9FA; /* Light gray background */
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc; /* Very light gray background for the whole page */
         }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03); /* Softer shadow */
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-        /* Цветовая палитра "Energetic & Playful" */
-        /* #FF6B6B (Vibrant Red/Pink) */
-        /* #FFD166 (Bright Yellow) */
-        /* #06D6A0 (Teal/Green) */
-        /* #118AB2 (Strong Blue) */
-        /* #073B4C (Dark Blue/Text/Accent) */
-
-        .text-brand-dark { color: #073B4C; }
-        .bg-brand-red { background-color: #FF6B6B; }
-        .text-brand-red { color: #FF6B6B; }
-        .bg-brand-yellow { background-color: #FFD166; }
-        .text-brand-yellow { color: #FFD166; }
-        .bg-brand-green { background-color: #06D6A0; }
-        .text-brand-green { color: #06D6A0; }
-        .bg-brand-blue { background-color: #118AB2; }
-        .text-brand-blue { color: #118AB2; }
-
-        .section-title {
-            color: #073B4C; /* Dark Blue */
-            border-bottom: 3px solid #06D6A0; /* Teal/Green */
-            padding-bottom: 0.5rem;
+        .metric-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            background-color: #f0f9ff; /* Light blue for metric cards */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02); /* Even softer shadow */
+            transition: transform 0.2s ease-in-out;
         }
-        .card {
-            background-color: white;
-            border-radius: 0.75rem; /* 12px */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease-in-out;
-        }
-        .card:hover {
+        .metric-card:hover {
             transform: translateY(-5px);
         }
-        .stat-number {
-            font-size: 3rem; /* 48px */
-            font-weight: 700;
-            line-height: 1;
-            color: #118AB2; /* Strong Blue */
+        .icon-bg {
+            background-color: #dbeafe; /* Lighter blue for icon background */
+            border-radius: 50%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        .solution-step {
-            border: 2px solid #118AB2; /* Strong Blue */
-            background-color: #E0F2F7; /* Light Blue */
-            color: #073B4C;
+        .chart-container {
+            width: 100%;
+            height: 150px;
+            margin-top: 1rem;
+        }
+        .trend-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #4b5563; /* Slightly darker gray text for better readability */
+        }
+        .positive-bg { background-color: #ecfdf5; } /* Very light green */
+        .stable-bg { background-color: #eff6ff; } /* Very light blue */
+        .growth-bg { background-color: #fffdf0; } /* Very light yellow */
+        .action-card {
+            background-color: #e0f2fe; /* Light sky blue */
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .action-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+        .action-card li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #4B5563;
+        }
+        .action-card li .icon-placeholder { /* Styling for the new icon placeholders */
+            margin-right: 0.5rem;
+            margin-top: 0.2rem;
+            color: #3b82f6; /* Stronger blue for action items */
+            font-size: 1.2em; /* Make them a bit larger */
+            line-height: 1; /* Align text better */
         }
     </style>
 </head>
-<body class="text-slate-700">
-    <!-- 
-        Infographic for Parents based on "родители.html" survey data.
-        Chosen Color Palette: "Energetic & Playful" (#FF6B6B, #FFD166, #06D6A0, #118AB2, #073B4C).
-        Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output. All charts are Chart.js (Canvas). Diagrams are HTML/CSS.
-        Focus: Academic aspects, methodological support, and formative assessment. No mention of sociocracy or Notion.
-        Update: Added emphasis on methodological circle's interaction with parent circle.
-    -->
+<body>
+    <div id="root"></div>
 
-    <main class="container mx-auto p-4 md:p-8">
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-        <section id="intro" class="text-center py-12 md:py-16">
-            <h1 class="text-4xl md:text-5xl font-bold text-brand-dark mb-4">Наш Год Вместе: Итоги и Планы Развития</h1>
-            <p class="text-xl md:text-2xl text-slate-600 mb-8">Ваш голос услышан! Отчет по результатам анкетирования родителей</p>
-            <p class="max-w-3xl mx-auto text-slate-500 mb-10">Мы благодарим каждого родителя, кто принял участие в анкетировании по итогам 2024-2025 учебного года. Ваше мнение чрезвычайно важно для нас и помогает формировать будущее школы "Компас". Мы внимательно изучили все ответы и готовы поделиться ключевыми выводами и нашими планами, основанными на вашем ценном фидбэке.</p>
-        </section>
+        // Placeholder icons (removed Lucide React components)
+        const CheckIcon = () => <span className="icon-placeholder">✅</span>;
+        const MinusIcon = () => <span className="icon-placeholder">➖</span>;
+        const StarIcon = () => <span className="icon-placeholder">⭐</span>;
+        const HeartIcon = () => <span className="icon-placeholder">❤️</span>;
+        const SmileIcon = () => <span className="icon-placeholder">😊</span>;
+        const TrendingUpIcon = () => <span className="icon-placeholder">📈</span>;
+        const RefreshCwIcon = () => <span className="icon-placeholder">🔄</span>;
+        const FolderIcon = () => <span className="icon-placeholder">📁</span>;
+        const GraduationCapIcon = () => <span className="icon-placeholder">🎓</span>;
+        const HomeIcon = () => <span className="icon-placeholder">🏠</span>;
+        const MessageSquareIcon = () => <span className="icon-placeholder">💬</span>;
+        const AlertCircleIcon = () => <span className="icon-placeholder">⚠️</span>;
+        const LightbulbIcon = () => <span className="icon-placeholder">💡</span>;
+        const ChevronRightIcon = () => <span className="icon-placeholder">▶️</span>;
 
-        <section id="what-we-value" class="py-12 md:py-16 bg-slate-50 rounded-xl">
-            <h2 class="section-title text-3xl font-bold mb-10 text-center">Что понравилось нашим детям и вам?</h2>
-            <p class="max-w-3xl mx-auto text-slate-600 mb-8 text-center">Ваши ответы показывают, что многие аспекты школьной жизни приносят радость и пользу.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-brand-dark mb-4">Как вы оцениваете учебный год ребёнка?</h3>
-                    <div class="chart-container h-72 md:h-80"><canvas id="parentsYearDescChart"></canvas></div>
-                    <p class="text-sm text-slate-500 mt-4">Большинство родителей описывают год как стабильный, поддерживающий и способствующий развитию.</p>
-                </div>
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-brand-dark mb-4">Что особенно понравилось?</h3>
-                    <ul class="list-none space-y-2 text-slate-600">
-                        <li class="flex items-start"><span class="text-brand-green mr-2">✅</span> <strong class="text-brand-dark">Атмосфера в школе/классе:</strong> Теплая, дружелюбная, комфортная.</li>
-                        <li class="flex items-start"><span class="text-brand-green mr-2">✅</span> <strong class="text-brand-dark">Педагоги и классные руководители:</strong> Их вовлеченность, отзывчивость, профессионализм.</li>
-                        <li class="flex items-start"><span class="text-brand-green mr-2">✅</span> <strong class="text-brand-dark">Индивидуальный подход:</strong> Внимание к потребностям каждого ребенка.</li>
-                        <li class="flex items-start"><span class="text-brand-green mr-2">✅</span> <strong class="text-brand-dark">Проектная деятельность:</strong> Интересные проекты и внеклассные мероприятия.</li>
-                        <li class="flex items-start"><span class="text-brand-green mr-2">✅</span> <strong class="text-brand-dark">Психологическая поддержка:</strong> Помощь психолога в учебном процессе.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
 
-        <section id="challenges-acknowledged" class="py-12 md:py-16">
-            <h2 class="section-title text-3xl font-bold mb-10 text-center">Какие были сложности?</h2>
-            <p class="max-w-3xl mx-auto text-slate-600 mb-8 text-center">Мы признаем, что в этом году были и трудности. Ваши отзывы помогают нам увидеть области для роста.</p>
+        function App() {
+            const [rechartsLoaded, setRechartsLoaded] = useState(false);
+            const [RechartsComponents, setRechartsComponents] = useState({});
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-brand-dark mb-4">Основные трудности, отмеченные вами:</h3>
-                    <ul class="list-none space-y-2 text-slate-600">
-                        <li class="flex items-start"><span class="text-brand-red mr-2">❌</span> <strong class="text-brand-dark">Академические трудности / Домашние задания:</strong> Сложности с успеваемостью, объем или характер ДЗ.</li>
-                        <li class="flex items-start"><span class="text-brand-red mr-2">❌</span> <strong class="text-brand-dark">Организационные вопросы:</strong> Непонятное расписание, частая смена учителей в начальной школе.</li>
-                        <li class="flex items-start"><span class="text-brand-red mr-2">❌</span> <strong class="text-brand-dark">Социальные конфликты:</strong> Трудности во взаимодействии между детьми.</li>
-                        <li class="flex items-start"><span class="text-brand-red mr-2">❌</span> <strong class="text-brand-dark">Нехватка обратной связи:</strong> Недостаток информации об успеваемости ребенка.</li>
-                        <li class="flex items-start"><span class="text-brand-red mr-2">❌</span> <strong class="text-brand-dark">Качество по отдельным предметам:</strong> Вопросы к преподаванию некоторых дисциплин.</li>
-                    </ul>
-                </div>
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-brand-dark mb-4">Ваши оценки: Где нам нужно расти?</h3>
-                    <div class="chart-container h-72 md:h-80"><canvas id="parentsKeyRatingsChart"></canvas></div>
-                    <p class="text-sm text-slate-500 mt-4">Мы видим, что, хотя вы высоко цените комфорт обсуждения вопросов, есть запрос на большую ясность в структуре школы.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="our-response" class="py-12 md:py-16 bg-slate-50 rounded-xl">
-            <h2 class="section-title text-3xl font-bold mb-10 text-center">Как мы реагируем: Наши планы на 2025-2026 год</h2>
-            <p class="max-w-3xl mx-auto text-slate-600 mb-8 text-center">Ваши предложения легли в основу наших стратегических решений. Мы стремимся к постоянному улучшению!</p>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-brand-blue mb-4">Новая система обратной связи: Формирующее оценивание</h3>
-                    <p class="text-slate-600 mb-4">Мы внедряем систему, которая даст вам более полную и понятную картину прогресса вашего ребенка, снижая при этом неэффективную нагрузку на учителей.</p>
-                    <ul class="list-disc list-inside space-y-2 text-slate-600 text-sm">
-                        <li><strong class="text-brand-dark">Структурированные комментарии:</strong> Ежемесячно вы будете получать четкие комментарии о том, что получается, что нужно улучшить, и конкретные рекомендации.</li>
-                        <li><strong class="text-brand-dark">Портфолио учеников:</strong> Мы создадим систему портфолио, где будут фиксироваться лучшие работы и прогресс ребенка, доступные вам для ознакомления.</li>
-                        <li><strong class="text-brand-dark">Фокус на развитии:</strong> Система будет ориентирована на поддержку развития, а не только на оценки.</li>
-                    </ul>
-                </div>
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-brand-blue mb-4">Усиление методической поддержки и качества обучения</h3>
-                    <p class="text-slate-600 mb-4">Для решения академических трудностей и повышения качества преподавания мы запускаем новые инициативы.</p>
-                    <ul class="list-disc list-inside space-y-2 text-slate-600 text-sm">
-                        <li><strong class="text-brand-dark">Запуск Методического круга:</strong> Создание платформы для обмена лучшими практиками, разработки единых методических подходов и повышения квалификации педагогов.</li>
-                        <li><strong class="text-brand-dark">Поддержка качества по предметам:</strong> Целенаправленная работа Методического круга над улучшением преподавания по тем предметам, где были выявлены сложности.</li>
-                        <li><strong class="text-brand-dark">Разработка единых стандартов:</strong> Создание ясных методических рекомендаций для педагогов, обеспечивающих высокое качество обучения.</li>
-                        <li><strong class="text-brand-dark">Взаимодействие с Родительским кругом:</strong> Методический круг будет активно взаимодействовать с Родительским кругом для обсуждения академических вопросов и получения ценной обратной связи, которую мы очень ценим.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="conclusion" class="text-center py-12 md:py-16">
-            <h2 class="section-title text-3xl font-bold mb-8">Вместе строим лучшую школу!</h2>
-            <p class="max-w-3xl mx-auto text-slate-600 mb-8">Мы ценим ваше партнерство и верим, что только совместными усилиями сможем создать максимально комфортную и эффективную образовательную среду для наших детей. Ваши отзывы — наш главный ориентир.</p>
-            <p class="text-brand-dark font-semibold text-xl">Благодарим за ваше доверие и активное участие!</p>
-        </section>
-
-        <footer class="text-center py-10 mt-12 border-t border-slate-300">
-            <p class="text-brand-dark font-semibold">Школа "Компас"</p>
-            <p class="text-sm text-slate-500">&copy; 2024-2025. Ваш голос важен!</p>
-        </footer>
-
-    </main>
-
-    <script>
-        // Ensure the script runs after the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            function wrapLabels(labels, maxLength) {
-                return labels.map(label => {
-                    if (typeof label === 'string' && label.length > maxLength) {
-                        const words = label.split(' ');
-                        const lines = [];
-                        let currentLine = '';
-                        words.forEach(word => {
-                            if ((currentLine + word).length > maxLength) {
-                                lines.push(currentLine.trim());
-                                currentLine = '';
-                            }
-                            currentLine += word + ' ';
+            useEffect(() => {
+                const checkRecharts = () => {
+                    if (window.Recharts && window.Recharts.LineChart && window.Recharts.ResponsiveContainer) {
+                        setRechartsComponents({
+                            LineChart: window.Recharts.LineChart,
+                            Line: window.Recharts.Line,
+                            XAxis: window.Recharts.XAxis,
+                            YAxis: window.Recharts.YAxis,
+                            CartesianGrid: window.Recharts.CartesianGrid,
+                            Tooltip: window.Recharts.Tooltip,
+                            ResponsiveContainer: window.Recharts.ResponsiveContainer
                         });
-                        lines.push(currentLine.trim());
-                        return lines;
+                        setRechartsLoaded(true);
+                        return true;
                     }
-                    return label;
-                });
-            }
+                    return false;
+                };
 
-            const tooltipTitleCallback = (tooltipItems) => {
-                const item = tooltipItems[0];
-                let label = item.chart.data.labels[item.dataIndex];
-                if (Array.isArray(label)) {
-                    return label.join(' ');
+                if (!checkRecharts()) {
+                    const checkInterval = setInterval(() => {
+                        if (checkRecharts()) {
+                            clearInterval(checkInterval);
+                        }
+                    }, 100);
                 }
-                return label;
-            };
+            }, []); // Empty dependency array means this effect runs once after the initial render
 
-            const commonChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: { size: 10 }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            title: tooltipTitleCallback
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: { size: 10 }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: { size: 10 },
-                            callback: function(value, index, values) {
-                                const label = this.getLabelForValue(value);
-                                if (Array.isArray(label)) return label; // Already wrapped
-                                if (typeof label === 'string' && label.length > 10) return label.substring(0,10) + '...';
-                                return label;
-                            }
-                        }
-                    }
-                }
-            };
-            
-            const commonPieDonutOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                         labels: {
-                            font: { size: 10 },
-                            boxWidth: 10,
-                            padding: 10
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            title: tooltipTitleCallback
-                        }
-                    }
-                }
-            };
+            // Data for the charts
+            const safetyData = [
+                { name: '2023-2024', value: 4.50 },
+                { name: '2024-2025', value: 4.19 },
+            ];
 
-            // Data from Python analysis (simulated for direct use in JS)
-            // Based on the previous analysis output:
-            // Average Trust in Team: 4.0
-            // Average Comfort Discussing: 4.1
-            // Average Clarity of Structure: 4.1
-            // Year Evaluation Counts: Counter({'Стабильный и поддерживающий': 5, 'Сложный, но развивающий': 4, 'Вдохновляющий': 3, 'Тревожный': 2, 'Противоречивый': 1})
-            const quantitativeData = {
-                "avg_trust": "4.0",
-                "avg_comfort": "4.1",
-                "avg_clarity": "4.1"
-            };
+            const communicationData = [
+                { name: '2023-2024', value: 4.04 },
+                { name: '2024-2025', value: 4.06 },
+            ];
 
-            const yearEvaluationChartData = {
-                "labels": ["Стабильный и поддерживающий", "Сложный, но развивающий", "Вдохновляющий", "Тревожный", "Противоречивый"],
-                "data": [5, 4, 3, 2, 1] 
-            };
+            // Conditionally render Recharts components
+            const RechartsCharts = rechartsLoaded ? (
+                <>
+                    {/* Безопасность и поддерживающая среда */}
+                    <div className="metric-card">
+                        <div className="icon-bg">
+                            <AlertCircleIcon />
+                        </div>
+                        <h4 className="text-xl font-semibold text-blue-800 mb-2">Безопасность и Поддержка</h4>
+                        <div className="w-full text-sm text-gray-600 mb-2">
+                            <p>2023-2024: 4.50</p>
+                            <p>2024-2025: 4.19</p>
+                        </div>
+                        <div className="chart-container">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
+                                    <XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <Tooltip />
+                                    <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Небольшая корректировка, над которой мы работаем</p>
+                    </div>
+
+                    {/* Комфорт обсуждения вопросов (Коммуникация) */}
+                    <div className="metric-card">
+                        <div className="icon-bg">
+                            <MessageSquareIcon />
+                        </div>
+                        <h4 className="text-xl font-semibold text-green-800 mb-2">Открытое Общение</h4>
+                        <div className="w-full text-sm text-gray-600 mb-2">
+                            <p>2023-2024: 4.04</p>
+                            <p>2024-2025: 4.06</p>
+                        </div>
+                        <div className="chart-container">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
+                                    <XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <Tooltip />
+                                    <Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Стабильный рост и укрепление доверия</p>
+                    </div>
+
+                    {/* Понятность структуры школы и процессов */}
+                    <div className="metric-card">
+                        <div className="icon-bg">
+                            <LightbulbIcon />
+                        </div>
+                        <h4 className="text-xl font-semibold text-purple-800 mb-2">Ясность Структуры</h4>
+                        <div className="w-full text-sm text-gray-600 mb-2">
+                            <p>2023-2024: Нет данных</p>
+                            <p>2024-2025: 4.06</p>
+                        </div>
+                        <p className="text-2xl font-bold text-purple-700 mt-4">4.06</p>
+                        <p className="text-xs text-gray-500 mt-2">Высокая оценка нового показателя</p>
+                    </div>
+                </>
+            ) : (
+                <div className="text-center py-10 text-lg text-gray-600">Загрузка графиков...</div>
+            );
 
 
-            // Chart for Year Evaluation
-            const parentsYearDescData = {
-                labels: wrapLabels(yearEvaluationChartData.labels, 16),
-                datasets: [{
-                    label: 'Описание учебного года ребёнка',
-                    data: yearEvaluationChartData.data,
-                    backgroundColor: ['#06D6A0', '#118AB2', '#FFD166', '#FF6B6B', '#073B4C'],
-                    hoverOffset: 4
-                }]
-            };
-            new Chart(document.getElementById('parentsYearDescChart'), { type: 'doughnut', data: parentsYearDescData, options: commonPieDonutOptions });
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 font-sans text-gray-800 p-6 sm:p-8 md:p-12 rounded-xl shadow-lg">
+                    <header className="text-center mb-12">
+                        <h1 className="text-4xl sm:text-5xl font-extrabold text-indigo-800 mb-4 leading-tight">
+                            Наш Общий Путь к Развитию Школы "Компас"
+                        </h1>
+                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                            Подводим итоги 2023-2024 и 2024-2025 учебных годов и строим планы на будущее
+                        </p>
+                    </header>
 
-            // Chart for Key Ratings (Trust, Comfort, Clarity)
-            const parentsKeyRatingsData = {
-                labels: wrapLabels(['Доверие команде школы', 'Комфорт обсуждения вопросов', 'Понятность структуры школы'], 16),
-                datasets: [{
-                    label: 'Средний балл (из 5)',
-                    data: [
-                        parseFloat(quantitativeData.avg_trust),
-                        parseFloat(quantitativeData.avg_comfort),
-                        parseFloat(quantitativeData.avg_clarity)
-                    ],
-                    backgroundColor: ['#118AB2', '#06D6A0', '#FFD166'],
-                    borderColor: ['#073B4C', '#073B4C', '#073B4C'],
-                    borderWidth: 1
-                }]
-            };
-            const parentsKeyRatingsOptions = JSON.parse(JSON.stringify(commonChartOptions));
-            parentsKeyRatingsOptions.scales.y.max = 5;
-            new Chart(document.getElementById('parentsKeyRatingsChart'), { type: 'bar', data: parentsKeyRatingsData, options: parentsKeyRatingsOptions });
-        });
+                    {/* Общая динамика и ключевые метрики */}
+                    <section className="section-card">
+                        <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
+                            I. Общая Картина: Ваши Отзывы – Наше Вдохновение
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                            <div className="p-6 bg-blue-50 rounded-xl shadow-inner">
+                                <h3 className="text-2xl font-semibold text-blue-700 mb-3">2023-2024: Год Первых Успехов и Ценных Наблюдений</h3>
+                                <p className="text-gray-700 leading-relaxed">
+                                    Высокие оценки и оправданные ожидания заложили фундамент. Ваши первые замечания стали для нас важными ориентирами для роста.
+                                </p>
+                            </div>
+                            <div className="p-6 bg-purple-50 rounded-xl shadow-inner">
+                                <h3 className="text-2xl font-semibold text-purple-700 mb-3">2024-2025: Год Динамичного Развития и Новых Возможностей</h3>
+                                <p className="text-gray-700 leading-relaxed">
+                                    Мы увидели более широкий спектр отзывов, что отражает нашу готовность к постоянному совершенствованию и открытию новых горизонтов.
+                                </p>
+                            </div>
+                        </div>
+
+                        <h3 className="text-2xl font-semibold text-indigo-700 mb-6 text-center">
+                            Ключевые Показатели Удовлетворенности (средний балл 1-5)
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {RechartsCharts}
+                        </div>
+                    </section>
+
+                    {/* Наши Достижения: Что Мы Улучшили и Сохранили */}
+                    <section className="section-card">
+                        <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
+                            II. Наши Достижения: Что Мы Укрепили и Сохранили
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {/* Улучшили */}
+                            <div className="p-5 positive-bg rounded-xl shadow-md flex flex-col items-center">
+                                <TrendingUpIcon />
+                                <h3 className="text-xl font-bold text-green-700 mb-4">Наш Прогресс: Что Мы Улучшили</h3>
+                                <ul className="space-y-2 text-left w-full">
+                                    <li className="flex items-center"><CheckIcon /> Понимание структуры и процессов</li>
+                                    <li className="flex items-center"><CheckIcon /> Комфорт в обсуждении вопросов</li>
+                                    <li className="flex items-center"><CheckIcon /> Психологическая поддержка и тьюторство</li>
+                                </ul>
+                            </div>
+
+                            {/* Сохранили */}
+                            <div className="p-5 stable-bg rounded-xl shadow-md flex flex-col items-center">
+                                <RefreshCwIcon />
+                                <h3 className="text-xl font-bold text-blue-700 mb-4">Наши Сильные Стороны: Что Мы Сохранили</h3>
+                                <ul className="space-y-2 text-left w-full">
+                                    <li className="flex items-center"><StarIcon /> Качество работы классных руководителей</li>
+                                    <li className="flex items-center"><HeartIcon /> Поддерживающая и дружелюбная атмосфера</li>
+                                    <li className="flex items-center"><SmileIcon /> Индивидуальный подход к детям</li>
+                                </ul>
+                            </div>
+
+                            {/* Области для Роста */}
+                            <div className="p-5 growth-bg rounded-xl shadow-md flex flex-col items-center">
+                                <FolderIcon />
+                                <h3 className="text-xl font-bold text-yellow-700 mb-4">Наши Точки Роста: Направления для Развития</h3>
+                                <ul className="space-y-2 text-left w-full">
+                                    <li className="flex items-center"><MinusIcon /> Дисциплина и поведение</li>
+                                    <li className="flex items-center"><MinusIcon /> Иностранные языки</li>
+                                    <li className="flex items-center"><MinusIcon /> Академическая строгость и оценивание</li>
+                                    <li className="flex items-center"><MinusIcon /> Доступность информации</li>
+                                    <li className="flex items-center"><MinusIcon /> Условия и чистота помещений</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Наши Ответы: Шаги к Улучшению */}
+                    <section className="section-card bg-indigo-50">
+                        <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
+                            III. Наши Ответы: Шаги к Совершенствованию в Новом Году
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="action-card">
+                                <GraduationCapIcon />
+                                <h3 className="text-xl font-semibold text-indigo-800 mb-2">Академический Прогресс</h3>
+                                <ul className="w-full">
+                                    <li><ChevronRightIcon /> Пересмотр программы по английскому языку.</li>
+                                    <li><ChevronRightIcon /> Внедрение четкой системы формирующего оценивания.</li>
+                                    <li><ChevronRightIcon /> Усиление методической поддержки.</li>
+                                </ul>
+                            </div>
+
+                            <div className="action-card">
+                                <HomeIcon />
+                                <h3 className="text-xl font-semibold text-indigo-800 mb-2">Комфортная Среда Обучения</h3>
+                                <ul className="w-full">
+                                    <li><ChevronRightIcon /> Улучшение чистоты и эстетики помещений.</li>
+                                    <li><ChevronRightIcon /> Разработка единых правил дисциплины.</li>
+                                </ul>
+                            </div>
+
+                            <div className="action-card">
+                                <MessageSquareIcon />
+                                <h3 className="text-xl font-semibold text-indigo-800 mb-2">Открытая и Эффективная Коммуникация</h3>
+                                <ul className="w-full">
+                                    <li><ChevronRightIcon /> Улучшение информирования.</li>
+                                    <li><ChevronRightIcon /> Запуск Методического круга.</li>
+                                    <li><ChevronRightIcon /> Новая система обратной связи для родителей.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Приглашение к диалогу */}
+                    <section className="section-card bg-purple-100 text-center">
+                        <h2 className="text-3xl font-bold text-purple-700 mb-4">
+                            Вместе к Успеху! Приглашаем к Диалогу и Сотрудничеству!
+                        </h2>
+                        <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
+                            Ваше активное участие в жизни Школы-Сада "Компас" – это наш общий ресурс для роста и процветания. Давайте строить будущее вместе!
+                        </p>
+                        <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center mx-auto">
+                            Присоединяйтесь к Родительскому кругу <ChevronRightIcon />
+                        </button>
+                    </section>
+                </div>
+            );
+        }
+
+        // Mount the React component to the root div
+        // Ensure this runs after all scripts are loaded
+        window.onload = () => {
+            ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+        };
     </script>
 </body>
 </html>
-```
