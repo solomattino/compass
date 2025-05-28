@@ -99,8 +99,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // Destructure Recharts components at the top of the Babel script block
-        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+        const { useState, useEffect } = React;
 
         // Placeholder icons (removed Lucide React components)
         const CheckIcon = () => <span className="icon-placeholder">✅</span>;
@@ -120,6 +119,23 @@
 
 
         function App() {
+            const [rechartsLoaded, setRechartsLoaded] = useState(false);
+
+            useEffect(() => {
+                // Check if Recharts is available after component mounts
+                if (window.Recharts) {
+                    setRechartsLoaded(true);
+                } else {
+                    // Fallback: poll for Recharts if not immediately available
+                    const checkInterval = setInterval(() => {
+                        if (window.Recharts) {
+                            setRechartsLoaded(true);
+                            clearInterval(checkInterval);
+                        }
+                    }, 100); // Check every 100ms
+                }
+            }, []); // Empty dependency array means this effect runs once after the initial render
+
             // Data for the charts
             const safetyData = [
                 { name: '2023-2024', value: 4.50 },
@@ -130,6 +146,75 @@
                 { name: '2023-2024', value: 4.04 },
                 { name: '2024-2025', value: 4.06 },
             ];
+
+            // Conditionally render Recharts components
+            const RechartsCharts = rechartsLoaded ? (
+                <>
+                    {/* Безопасность и поддерживающая среда */}
+                    <div className="metric-card">
+                        <div className="icon-bg">
+                            <AlertCircleIcon />
+                        </div>
+                        <h4 className="text-xl font-semibold text-blue-800 mb-2">Безопасность и Поддержка</h4>
+                        <div className="w-full text-sm text-gray-600 mb-2">
+                            <p>2023-2024: 4.50</p>
+                            <p>2024-2025: 4.19</p>
+                        </div>
+                        <div className="chart-container">
+                            <window.Recharts.ResponsiveContainer width="100%" height="100%">
+                                <window.Recharts.LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <window.Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
+                                    <window.Recharts.XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <window.Recharts.YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <window.Recharts.Tooltip />
+                                    <window.Recharts.Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </window.Recharts.LineChart>
+                            </window.Recharts.ResponsiveContainer>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Небольшая корректировка, над которой мы работаем</p>
+                    </div>
+
+                    {/* Комфорт обсуждения вопросов (Коммуникация) */}
+                    <div className="metric-card">
+                        <div className="icon-bg">
+                            <MessageSquareIcon />
+                        </div>
+                        <h4 className="text-xl font-semibold text-green-800 mb-2">Открытое Общение</h4>
+                        <div className="w-full text-sm text-gray-600 mb-2">
+                            <p>2023-2024: 4.04</p>
+                            <p>2024-2025: 4.06</p>
+                        </div>
+                        <div className="chart-container">
+                            <window.Recharts.ResponsiveContainer width="100%" height="100%">
+                                <window.Recharts.LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <window.Recharts.CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
+                                    <window.Recharts.XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <window.Recharts.YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <window.Recharts.Tooltip />
+                                    <window.Recharts.Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </window.Recharts.LineChart>
+                            </window.Recharts.ResponsiveContainer>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Стабильный рост и укрепление доверия</p>
+                    </div>
+
+                    {/* Понятность структуры школы и процессов */}
+                    <div className="metric-card">
+                        <div className="icon-bg">
+                            <LightbulbIcon />
+                        </div>
+                        <h4 className="text-xl font-semibold text-purple-800 mb-2">Ясность Структуры</h4>
+                        <div className="w-full text-sm text-gray-600 mb-2">
+                            <p>2023-2024: Нет данных</p>
+                            <p>2024-2025: 4.06</p>
+                        </div>
+                        <p className="text-2xl font-bold text-purple-700 mt-4">4.06</p>
+                        <p className="text-xs text-gray-500 mt-2">Высокая оценка нового показателя</p>
+                    </div>
+                </>
+            ) : (
+                <div className="text-center py-10 text-lg text-gray-600">Загрузка графиков...</div>
+            );
 
 
             return (
@@ -167,67 +252,7 @@
                             Ключевые Показатели Удовлетворенности (средний балл 1-5)
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {/* Безопасность и поддерживающая среда */}
-                            <div className="metric-card">
-                                <div className="icon-bg">
-                                    <AlertCircleIcon />
-                                </div>
-                                <h4 className="text-xl font-semibold text-blue-800 mb-2">Безопасность и Поддержка</h4>
-                                <div className="w-full text-sm text-gray-600 mb-2">
-                                    <p>2023-2024: 4.50</p>
-                                    <p>2024-2025: 4.19</p>
-                                </div>
-                                <div className="chart-container">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
-                                            <XAxis dataKey="name" stroke="#9CA3AF" />
-                                            <YAxis domain={[3, 5]} stroke="#9CA3AF" />
-                                            <Tooltip />
-                                            <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
-                                        </LineChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <p className="text-xs text-gray-500 mt-2">Небольшая корректировка, над которой мы работаем</p>
-                            </div>
-
-                            {/* Комфорт обсуждения вопросов (Коммуникация) */}
-                            <div className="metric-card">
-                                <div className="icon-bg">
-                                    <MessageSquareIcon />
-                                </div>
-                                <h4 className="text-xl font-semibold text-green-800 mb-2">Открытое Общение</h4>
-                                <div className="w-full text-sm text-gray-600 mb-2">
-                                    <p>2023-2024: 4.04</p>
-                                    <p>2024-2025: 4.06</p>
-                                </div>
-                                <div className="chart-container">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
-                                            <XAxis dataKey="name" stroke="#9CA3AF" />
-                                            <YAxis domain={[3, 5]} stroke="#9CA3AF" />
-                                            <Tooltip />
-                                            <Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
-                                        </LineChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <p className="text-xs text-gray-500 mt-2">Стабильный рост и укрепление доверия</p>
-                            </div>
-
-                            {/* Понятность структуры школы и процессов */}
-                            <div className="metric-card">
-                                <div className="icon-bg">
-                                    <LightbulbIcon />
-                                </div>
-                                <h4 className="text-xl font-semibold text-purple-800 mb-2">Ясность Структуры</h4>
-                                <div className="w-full text-sm text-gray-600 mb-2">
-                                    <p>2023-2024: Нет данных</p>
-                                    <p>2024-2025: 4.06</p>
-                                </div>
-                                <p className="text-2xl font-bold text-purple-700 mt-4">4.06</p>
-                                <p className="text-xs text-gray-500 mt-2">Высокая оценка нового показателя</p>
-                            </div>
+                            {RechartsCharts}
                         </div>
                     </section>
 
