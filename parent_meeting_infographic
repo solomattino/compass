@@ -1,0 +1,297 @@
+import React from 'react';
+import { CheckCircle, MinusCircle, XCircle, AlertCircle, TrendingUp, TrendingDown, RefreshCw, BookOpen, Home, Zap, Users, MessageSquare, Target, Folder, Lightbulb, GraduationCap, Handshake, ChevronRight, Star, Heart, Smile } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+function App() {
+  // Data for the charts
+  const safetyData = [
+    { name: '2023-2024', value: 4.50 },
+    { name: '2024-2025', value: 4.19 },
+  ];
+
+  const communicationData = [
+    { name: '2023-2024', value: 4.04 },
+    { name: '2024-2025', value: 4.06 },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 font-sans text-gray-800 p-6 sm:p-8 md:p-12 rounded-xl shadow-lg">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+      <style>
+        {`
+          body {
+            font-family: 'Inter', sans-serif;
+          }
+          .section-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 2rem;
+            margin-bottom: 2rem;
+          }
+          .metric-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            background-color: #f0f9ff; /* Light blue for metric cards */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease-in-out;
+          }
+          .metric-card:hover {
+            transform: translateY(-5px);
+          }
+          .icon-bg {
+            background-color: #bfdbfe; /* Muted blue for icon background */
+            border-radius: 50%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .chart-container {
+            width: 100%;
+            height: 150px;
+            margin-top: 1rem;
+          }
+          .trend-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #374151;
+          }
+          .positive-bg { background-color: #dcfce7; } /* Light green */
+          .stable-bg { background-color: #e0f2fe; } /* Light blue */
+          .growth-bg { background-color: #fffbeb; } /* Light yellow */
+          .action-card {
+            background-color: #eef2ff; /* Light indigo */
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+          .action-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+          }
+          .action-card li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #4B5563;
+          }
+          .action-card li svg {
+            margin-right: 0.5rem;
+            margin-top: 0.2rem;
+            color: #6366f1; /* Indigo-500 */
+          }
+        `}
+      </style>
+
+      <header className="text-center mb-12">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-indigo-800 mb-4 leading-tight">
+          Наш Путь Развития: Динамика Обратной Связи от Родителей
+        </h1>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          Сравнительный анализ 2023-2024 и 2024-2025 учебных годов
+        </p>
+      </header>
+
+      {/* Общая динамика и ключевые метрики */}
+      <section className="section-card">
+        <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
+          I. Общая Картина и Показатели Удовлетворенности
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+          <div className="p-6 bg-blue-50 rounded-xl shadow-inner">
+            <h3 className="text-2xl font-semibold text-blue-700 mb-3">2023-2024: Год Позитивных Ожиданий</h3>
+            <p className="text-gray-700 leading-relaxed">
+              Высокие оценки и оправданные ожидания. Мы получили ценные первые замечания, которые стали отправной точкой для улучшений.
+            </p>
+          </div>
+          <div className="p-6 bg-purple-50 rounded-xl shadow-inner">
+            <h3 className="text-2xl font-semibold text-purple-700 mb-3">2024-2025: Год Роста и Новых Открытий</h3>
+            <p className="text-gray-700 leading-relaxed">
+              Мы увидели более разнообразные отзывы, что говорит о нашем развитии и готовности к новым вызовам.
+            </p>
+          </div>
+        </div>
+
+        <h3 className="text-2xl font-semibold text-indigo-700 mb-6 text-center">
+          Динамика Удовлетворенности (средний балл 1-5)
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Безопасность и поддерживающая среда */}
+          <div className="metric-card">
+            <div className="icon-bg">
+              <AlertCircle size={36} className="text-blue-600" />
+            </div>
+            <h4 className="text-xl font-semibold text-blue-800 mb-2">Безопасность и Среда</h4>
+            <div className="w-full text-sm text-gray-600 mb-2">
+              <p>2023-2024: 4.50</p>
+              <p>2024-2025: 4.19</p>
+            </div>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
+                  <XAxis dataKey="name" stroke="#9CA3AF" />
+                  <YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Небольшая корректировка</p>
+          </div>
+
+          {/* Комфорт обсуждения вопросов (Коммуникация) */}
+          <div className="metric-card">
+            <div className="icon-bg">
+              <MessageSquare size={36} className="text-green-600" />
+            </div>
+            <h4 className="text-xl font-semibold text-green-800 mb-2">Комфорт Общения</h4>
+            <div className="w-full text-sm text-gray-600 mb-2">
+              <p>2023-2024: 4.04</p>
+              <p>2024-2025: 4.06</p>
+            </div>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
+                  <XAxis dataKey="name" stroke="#9CA3AF" />
+                  <YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Стабильный рост</p>
+          </div>
+
+          {/* Понятность структуры школы и процессов */}
+          <div className="metric-card">
+            <div className="icon-bg">
+              <Lightbulb size={36} className="text-purple-600" />
+            </div>
+            <h4 className="text-xl font-semibold text-purple-800 mb-2">Понятность Структуры</h4>
+            <div className="w-full text-sm text-gray-600 mb-2">
+              <p>2023-2024: Нет данных</p>
+              <p>2024-2025: 4.06</p>
+            </div>
+            <p className="text-2xl font-bold text-purple-700 mt-4">4.06</p>
+            <p className="text-xs text-gray-500 mt-2">Высокий старт для нового показателя</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Наши Достижения: Что Мы Улучшили и Сохранили */}
+      <section className="section-card">
+        <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
+          II. Наши Достижения: Что Мы Улучшили и Сохранили
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Улучшили */}
+          <div className="p-5 positive-bg rounded-xl shadow-md flex flex-col items-center">
+            <TrendingUp size={48} className="text-green-600 mb-3" />
+            <h3 className="text-xl font-bold text-green-700 mb-4">Наш Прогресс</h3>
+            <ul className="space-y-2 text-left w-full">
+              <li className="flex items-center"><CheckCircle size={18} className="text-green-600 mr-2" /> Понимание структуры и процессов</li>
+              <li className="flex items-center"><CheckCircle size={18} className="text-green-600 mr-2" /> Комфорт в обсуждении вопросов</li>
+              <li className="flex items-center"><CheckCircle size={18} className="text-green-600 mr-2" /> Психологическая поддержка и тьюторство</li>
+            </ul>
+          </div>
+
+          {/* Сохранили */}
+          <div className="p-5 stable-bg rounded-xl shadow-md flex flex-col items-center">
+            <RefreshCw size={48} className="text-blue-600 mb-3" />
+            <h3 className="text-xl font-bold text-blue-700 mb-4">Наши Сильные Стороны</h3>
+            <ul className="space-y-2 text-left w-full">
+              <li className="flex items-center"><Star size={18} className="text-blue-600 mr-2" /> Качество работы классных руководителей</li>
+              <li className="flex items-center"><Heart size={18} className="text-blue-600 mr-2" /> Поддерживающая и дружелюбная атмосфера</li>
+              <li className="flex items-center"><Smile size={18} className="text-blue-600 mr-2" /> Индивидуальный подход к детям</li>
+            </ul>
+          </div>
+
+          {/* Области для Роста */}
+          <div className="p-5 growth-bg rounded-xl shadow-md flex flex-col items-center">
+            <Folder size={48} className="text-yellow-600 mb-3" />
+            <h3 className="text-xl font-bold text-yellow-700 mb-4">Области для Роста</h3>
+            <ul className="space-y-2 text-left w-full">
+              <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Дисциплина и поведение</li>
+              <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Иностранные языки</li>
+              <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Академическая строгость и оценивание</li>
+              <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Доступность информации</li>
+              <li className="flex items-center"><MinusCircle size={18} className="text-yellow-600 mr-2" /> Условия и чистота помещений</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Наши Ответы: Шаги к Улучшению */}
+      <section className="section-card bg-indigo-50">
+        <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
+          III. Наши Ответы: Шаги к Улучшению в Новом Году
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="action-card">
+            <GraduationCap size={48} className="text-indigo-600 mb-3" />
+            <h3 className="text-xl font-semibold text-indigo-800 mb-2">Академический Рост</h3>
+            <ul className="w-full">
+              <li><ChevronRight size={18} /> Пересмотр программы по английскому языку.</li>
+              <li><ChevronRight size={18} /> Внедрение четкой системы формирующего оценивания.</li>
+              <li><ChevronRight size={18} /> Усиление методической поддержки.</li>
+            </ul>
+          </div>
+
+          <div className="action-card">
+            <Home size={48} className="text-indigo-600 mb-3" />
+            <h3 className="text-xl font-semibold text-indigo-800 mb-2">Комфортная Среда</h3>
+            <ul className="w-full">
+              <li><ChevronRight size={18} /> Улучшение чистоты и эстетики помещений.</li>
+              <li><ChevronRight size={18} /> Разработка единых правил дисциплины.</li>
+            </ul>
+          </div>
+
+          <div className="action-card">
+            <MessageSquare size={48} className="text-indigo-600 mb-3" />
+            <h3 className="text-xl font-semibold text-indigo-800 mb-2">Открытая Коммуникация</h3>
+            <ul className="w-full">
+              <li><ChevronRight size={18} /> Улучшение информирования.</li>
+              <li><ChevronRight size={18} /> Запуск Методического круга.</li>
+              <li><ChevronRight size={18} /> Новая система обратной связи для родителей.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Приглашение к диалогу */}
+      <section className="section-card bg-purple-100 text-center">
+        <h2 className="text-3xl font-bold text-purple-700 mb-4">
+          Вместе к Успеху! Приглашаем к Диалогу!
+        </h2>
+        <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
+          Ваше активное участие в жизни Школы-Сада "Компас" – ключ к нашему общему успеху и процветанию. Давайте строить будущее вместе!
+        </p>
+        <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center mx-auto">
+          Присоединяйтесь к Родительскому кругу <ChevronRight size={20} className="ml-2" />
+        </button>
+      </section>
+    </div>
+  );
+}
+
+export default App;
