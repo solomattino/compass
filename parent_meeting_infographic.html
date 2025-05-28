@@ -1,3 +1,5 @@
+и </html>)">
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -63,6 +65,14 @@
     </style>
 </head>
 <body class="text-slate-700">
+    <!-- 
+        Infographic for Parents based on "родители.html" survey data.
+        Chosen Color Palette: "Energetic & Playful" (#FF6B6B, #FFD166, #06D6A0, #118AB2, #073B4C).
+        Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output. All charts are Chart.js (Canvas). Diagrams are HTML/CSS.
+        Focus: Academic aspects, methodological support, and formative assessment. No mention of sociocracy or Notion.
+        Update: Added emphasis on methodological circle's interaction with parent circle.
+    -->
+
     <main class="container mx-auto p-4 md:p-8">
 
         <section id="intro" class="text-center py-12 md:py-16">
@@ -158,141 +168,144 @@
     </main>
 
     <script>
-        function wrapLabels(labels, maxLength) {
-            return labels.map(label => {
-                if (typeof label === 'string' && label.length > maxLength) {
-                    const words = label.split(' ');
-                    const lines = [];
-                    let currentLine = '';
-                    words.forEach(word => {
-                        if ((currentLine + word).length > maxLength) {
-                            lines.push(currentLine.trim());
-                            currentLine = '';
-                        }
-                        currentLine += word + ' ';
-                    });
-                    lines.push(currentLine.trim());
-                    return lines;
+        // Ensure the script runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            function wrapLabels(labels, maxLength) {
+                return labels.map(label => {
+                    if (typeof label === 'string' && label.length > maxLength) {
+                        const words = label.split(' ');
+                        const lines = [];
+                        let currentLine = '';
+                        words.forEach(word => {
+                            if ((currentLine + word).length > maxLength) {
+                                lines.push(currentLine.trim());
+                                currentLine = '';
+                            }
+                            currentLine += word + ' ';
+                        });
+                        lines.push(currentLine.trim());
+                        return lines;
+                    }
+                    return label;
+                });
+            }
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
                 }
                 return label;
-            });
-        }
+            };
 
-        const tooltipTitleCallback = (tooltipItems) => {
-            const item = tooltipItems[0];
-            let label = item.chart.data.labels[item.dataIndex];
-            if (Array.isArray(label)) {
-                return label.join(' ');
-            }
-            return label;
-        };
-
-        const commonChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: { size: 10 }
+            const commonChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 10 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
                     }
                 },
-                tooltip: {
-                    callbacks: {
-                        title: tooltipTitleCallback
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        font: { size: 10 }
-                    }
-                },
-                x: {
-                    ticks: {
-                        font: { size: 10 },
-                        callback: function(value, index, values) {
-                            const label = this.getLabelForValue(value);
-                            if (Array.isArray(label)) return label; // Already wrapped
-                            if (typeof label === 'string' && label.length > 10) return label.substring(0,10) + '...';
-                            return label;
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 10 },
+                            callback: function(value, index, values) {
+                                const label = this.getLabelForValue(value);
+                                if (Array.isArray(label)) return label; // Already wrapped
+                                if (typeof label === 'string' && label.length > 10) return label.substring(0,10) + '...';
+                                return label;
+                            }
                         }
                     }
                 }
-            }
-        };
-        
-        const commonPieDonutOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'right',
-                     labels: {
-                        font: { size: 10 },
-                        boxWidth: 10,
-                        padding: 10
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        title: tooltipTitleCallback
+            };
+            
+            const commonPieDonutOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                         labels: {
+                            font: { size: 10 },
+                            boxWidth: 10,
+                            padding: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        // Data from Python analysis (simulated for direct use in JS)
-        // Based on the previous analysis output:
-        // Average Trust in Team: 4.0
-        // Average Comfort Discussing: 4.1
-        // Average Clarity of Structure: 4.1
-        // Year Evaluation Counts: Counter({'Стабильный и поддерживающий': 5, 'Сложный, но развивающий': 4, 'Вдохновляющий': 3, 'Тревожный': 2, 'Противоречивый': 1})
-        const quantitativeData = {
-            "avg_trust": "4.0",
-            "avg_comfort": "4.1",
-            "avg_clarity": "4.1"
-        };
+            // Data from Python analysis (simulated for direct use in JS)
+            // Based on the previous analysis output:
+            // Average Trust in Team: 4.0
+            // Average Comfort Discussing: 4.1
+            // Average Clarity of Structure: 4.1
+            // Year Evaluation Counts: Counter({'Стабильный и поддерживающий': 5, 'Сложный, но развивающий': 4, 'Вдохновляющий': 3, 'Тревожный': 2, 'Противоречивый': 1})
+            const quantitativeData = {
+                "avg_trust": "4.0",
+                "avg_comfort": "4.1",
+                "avg_clarity": "4.1"
+            };
 
-        const yearEvaluationChartData = {
-            "labels": ["Стабильный и поддерживающий", "Сложный, но развивающий", "Вдохновляющий", "Тревожный", "Противоречивый"],
-            "data": [5, 4, 3, 2, 1] 
-        };
+            const yearEvaluationChartData = {
+                "labels": ["Стабильный и поддерживающий", "Сложный, но развивающий", "Вдохновляющий", "Тревожный", "Противоречивый"],
+                "data": [5, 4, 3, 2, 1] 
+            };
 
 
-        // Chart for Year Evaluation
-        const parentsYearDescData = {
-            labels: wrapLabels(yearEvaluationChartData.labels, 16),
-            datasets: [{
-                label: 'Описание учебного года ребёнка',
-                data: yearEvaluationChartData.data,
-                backgroundColor: ['#06D6A0', '#118AB2', '#FFD166', '#FF6B6B', '#073B4C'],
-                hoverOffset: 4
-            }]
-        };
-        new Chart(document.getElementById('parentsYearDescChart'), { type: 'doughnut', data: parentsYearDescData, options: commonPieDonutOptions });
+            // Chart for Year Evaluation
+            const parentsYearDescData = {
+                labels: wrapLabels(yearEvaluationChartData.labels, 16),
+                datasets: [{
+                    label: 'Описание учебного года ребёнка',
+                    data: yearEvaluationChartData.data,
+                    backgroundColor: ['#06D6A0', '#118AB2', '#FFD166', '#FF6B6B', '#073B4C'],
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(document.getElementById('parentsYearDescChart'), { type: 'doughnut', data: parentsYearDescData, options: commonPieDonutOptions });
 
-        // Chart for Key Ratings (Trust, Comfort, Clarity)
-        const parentsKeyRatingsData = {
-            labels: wrapLabels(['Доверие команде школы', 'Комфорт обсуждения вопросов', 'Понятность структуры школы'], 16),
-            datasets: [{
-                label: 'Средний балл (из 5)',
-                data: [
-                    parseFloat(quantitativeData.avg_trust),
-                    parseFloat(quantitativeData.avg_comfort),
-                    parseFloat(quantitativeData.avg_clarity)
-                ],
-                backgroundColor: ['#118AB2', '#06D6A0', '#FFD166'],
-                borderColor: ['#073B4C', '#073B4C', '#073B4C'],
-                borderWidth: 1
-            }]
-        };
-        const parentsKeyRatingsOptions = JSON.parse(JSON.stringify(commonChartOptions));
-        parentsKeyRatingsOptions.scales.y.max = 5;
-        new Chart(document.getElementById('parentsKeyRatingsChart'), { type: 'bar', data: parentsKeyRatingsData, options: parentsKeyRatingsOptions });
-
+            // Chart for Key Ratings (Trust, Comfort, Clarity)
+            const parentsKeyRatingsData = {
+                labels: wrapLabels(['Доверие команде школы', 'Комфорт обсуждения вопросов', 'Понятность структуры школы'], 16),
+                datasets: [{
+                    label: 'Средний балл (из 5)',
+                    data: [
+                        parseFloat(quantitativeData.avg_trust),
+                        parseFloat(quantitativeData.avg_comfort),
+                        parseFloat(quantitativeData.avg_clarity)
+                    ],
+                    backgroundColor: ['#118AB2', '#06D6A0', '#FFD166'],
+                    borderColor: ['#073B4C', '#073B4C', '#073B4C'],
+                    borderWidth: 1
+                }]
+            };
+            const parentsKeyRatingsOptions = JSON.parse(JSON.stringify(commonChartOptions));
+            parentsKeyRatingsOptions.scales.y.max = 5;
+            new Chart(document.getElementById('parentsKeyRatingsChart'), { type: 'bar', data: parentsKeyRatingsData, options: parentsKeyRatingsOptions });
+        });
     </script>
 </body>
 </html>
+```
