@@ -101,7 +101,7 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Placeholder icons (these don't depend on external libraries, so can be global)
+        // Placeholder icons (removed Lucide React components)
         const CheckIcon = () => <span className="icon-placeholder">✅</span>;
         const MinusIcon = () => <span className="icon-placeholder">➖</span>;
         const StarIcon = () => <span className="icon-placeholder">⭐</span>;
@@ -119,41 +119,6 @@
 
 
         function App() {
-            const [rechartsLoaded, setRechartsLoaded] = useState(false);
-            const [RechartsComponents, setRechartsComponents] = useState({});
-
-            useEffect(() => {
-                const checkRecharts = () => {
-                    if (window.Recharts && typeof window.Recharts.LineChart !== 'undefined' && typeof window.Recharts.ResponsiveContainer !== 'undefined') {
-                        setRechartsComponents({
-                            LineChart: window.Recharts.LineChart,
-                            Line: window.Recharts.Line,
-                            XAxis: window.Recharts.XAxis,
-                            YAxis: window.Recharts.YAxis,
-                            CartesianGrid: window.Recharts.CartesianGrid,
-                            Tooltip: window.Recharts.Tooltip,
-                            ResponsiveContainer: window.Recharts.ResponsiveContainer
-                        });
-                        setRechartsLoaded(true);
-                        console.log("Recharts loaded successfully!"); // Debugging
-                        return true;
-                    }
-                    console.log("Recharts not yet loaded..."); // Debugging
-                    return false;
-                };
-
-                // Attempt to check immediately
-                if (!checkRecharts()) {
-                    // If not loaded, set up an interval to check periodically
-                    const checkInterval = setInterval(() => {
-                        if (checkRecharts()) {
-                            clearInterval(checkInterval); // Stop checking once loaded
-                        }
-                    }, 50); // Check more frequently
-                    return () => clearInterval(checkInterval); // Cleanup on unmount
-                }
-            }, []); // Empty dependency array means this effect runs once after the initial render
-
             // Data for the charts
             const safetyData = [
                 { name: '2023-2024', value: 4.50 },
@@ -165,8 +130,9 @@
                 { name: '2024-2025', value: 4.06 },
             ];
 
-            // Conditionally render Recharts components using the state
-            const RechartsCharts = rechartsLoaded ? (
+            // Conditionally render Recharts components using direct access
+            // This will only render if window.Recharts and its components are available
+            const RechartsCharts = window.Recharts && window.Recharts.LineChart && window.Recharts.ResponsiveContainer ? (
                 <>
                     {/* Безопасность и поддерживающая среда */}
                     <div className="metric-card">
@@ -179,15 +145,15 @@
                             <p>2024-2025: 4.19</p>
                         </div>
                         <div className="chart-container">
-                            <RechartsComponents.ResponsiveContainer width="100%" height="100%">
-                                <RechartsComponents.LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                                    <RechartsComponents.CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
-                                    <RechartsComponents.XAxis dataKey="name" stroke="#9CA3AF" />
-                                    <RechartsComponents.YAxis domain={[3, 5]} stroke="#9CA3AF" />
-                                    <RechartsComponents.Tooltip />
-                                    <RechartsComponents.Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
-                                </RechartsComponents.LineChart>
-                            </RechartsComponents.ResponsiveContainer>
+                            <window.Recharts.ResponsiveContainer width="100%" height="100%">
+                                <window.Recharts.LineChart data={safetyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <window.Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e0f2fe" />
+                                    <window.Recharts.XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <window.Recharts.YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <window.Recharts.Tooltip />
+                                    <window.Recharts.Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </window.Recharts.LineChart>
+                            </window.Recharts.ResponsiveContainer>
                         </div>
                         <p className="text-xs text-gray-500 mt-2">Небольшая корректировка, над которой мы работаем</p>
                     </div>
@@ -203,15 +169,15 @@
                             <p>2024-2025: 4.06</p>
                         </div>
                         <div className="chart-container">
-                            <RechartsComponents.ResponsiveContainer width="100%" height="100%">
-                                <RechartsComponents.LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                                    <RechartsComponents.CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
-                                    <RechartsComponents.XAxis dataKey="name" stroke="#9CA3AF" />
-                                    <RechartsComponents.YAxis domain={[3, 5]} stroke="#9CA3AF" />
-                                    <RechartsComponents.Tooltip />
-                                    <RechartsComponents.Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
-                                </RechartsComponents.LineChart>
-                            </RechartsComponents.ResponsiveContainer>
+                            <window.Recharts.ResponsiveContainer width="100%" height="100%">
+                                <window.Recharts.LineChart data={communicationData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <window.Recharts.CartesianGrid strokeDasharray="3 3" stroke="#dcfce7" />
+                                    <window.Recharts.XAxis dataKey="name" stroke="#9CA3AF" />
+                                    <window.Recharts.YAxis domain={[3, 5]} stroke="#9CA3AF" />
+                                    <window.Recharts.Tooltip />
+                                    <window.Recharts.Line type="monotone" dataKey="value" stroke="#22C55E" strokeWidth={3} activeDot={{ r: 6 }} />
+                                </window.Recharts.LineChart>
+                            </window.Recharts.ResponsiveContainer>
                         </div>
                         <p className="text-xs text-gray-500 mt-2">Стабильный рост и укрепление доверия</p>
                     </div>
@@ -327,9 +293,9 @@
                                 <GraduationCapIcon />
                                 <h3 className="text-xl font-semibold text-indigo-800 mb-2">Академический Прогресс</h3>
                                 <ul className="w-full">
-                                    <li className="flex items-center"><ChevronRightIcon /> Пересмотр программы по английскому языку.</li>
-                                    <li className="flex items-center"><ChevronRightIcon /> Внедрение четкой системы формирующего оценивания.</li>
-                                    <li className="flex items-center"><ChevronRightIcon /> Усиление методической поддержки.</li>
+                                    <li><ChevronRightIcon /> Пересмотр программы по английскому языку.</li>
+                                    <li><ChevronRightIcon /> Внедрение четкой системы формирующего оценивания.</li>
+                                    <li><ChevronRightIcon /> Усиление методической поддержки.</li>
                                 </ul>
                             </div>
 
@@ -337,8 +303,8 @@
                                 <HomeIcon />
                                 <h3 className="text-xl font-semibold text-indigo-800 mb-2">Комфортная Среда Обучения</h3>
                                 <ul className="w-full">
-                                    <li className="flex items-center"><ChevronRightIcon /> Улучшение чистоты и эстетики помещений.</li>
-                                    <li className="flex items-center"><ChevronRightIcon /> Разработка единых правил дисциплины.</li>
+                                    <li><ChevronRightIcon /> Улучшение чистоты и эстетики помещений.</li>
+                                    <li><ChevronRightIcon /> Разработка единых правил дисциплины.</li>
                                 </ul>
                             </div>
 
@@ -346,9 +312,9 @@
                                 <MessageSquareIcon />
                                 <h3 className="text-xl font-semibold text-indigo-800 mb-2">Открытая и Эффективная Коммуникация</h3>
                                 <ul className="w-full">
-                                    <li className="flex items-center"><ChevronRightIcon /> Улучшение информирования.</li>
-                                    <li className="flex items-center"><ChevronRightIcon /> Запуск Методического круга.</li>
-                                    <li className="flex items-center"><ChevronRightIcon /> Новая система обратной связи для родителей.</li>
+                                    <li><ChevronRightIcon /> Улучшение информирования.</li>
+                                    <li><ChevronRightIcon /> Запуск Методического круга.</li>
+                                    <li><ChevronRightIcon /> Новая система обратной связи для родителей.</li>
                                 </ul>
                             </div>
                         </div>
@@ -373,14 +339,7 @@
         // Mount the React component to the root div
         // Ensure this runs after all scripts are loaded
         window.onload = () => {
-            // Check if Recharts is available before rendering
-            if (window.Recharts && window.Recharts.LineChart && window.Recharts.ResponsiveContainer) {
-                ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-            } else {
-                // Fallback or error message if Recharts is not loaded
-                console.error("Recharts library not loaded. Cannot render charts.");
-                document.getElementById('root').innerHTML = '<div style="text-align: center; padding: 50px; color: red;">Ошибка: Графики не могут быть загружены. Пожалуйста, попробуйте обновить страницу.</div>';
-            }
+            ReactDOM.createRoot(document.getElementById('root')).render(<App />);
         };
     </script>
 </body>
